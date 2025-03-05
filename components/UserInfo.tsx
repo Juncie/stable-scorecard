@@ -12,6 +12,7 @@ interface UserInfoValues {
   lastName: string;
   email: string;
   phone: string;
+  date: Date;
 }
 
 const UserInfo: React.FC<UserInfoProps> = ({ formik, next }) => {
