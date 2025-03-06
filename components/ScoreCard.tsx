@@ -15,7 +15,7 @@ interface ScoreCardValues {
 const ScoreCard: React.FC<ScoreCardProps> = ({ formik, previous, submit }) => {
   return (
     <Box className="grid gap-4 mt-4">
-      <Typography variant="h4">Enter Your Stable Scores</Typography>
+      <Typography variant="h5">Enter Your Stable Scores</Typography>
       {[...Array(9)].map((_, index) => (
         <TextField
           key={index}

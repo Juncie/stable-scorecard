@@ -3,16 +3,12 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import {
-  Container,
-  Paper,
-  CircularProgress,
-  Typography,
-  Box,
-} from "@mui/material";
+import { Paper, CircularProgress, Typography, Box } from "@mui/material";
 import UserInfo from "../components/UserInfo";
 import ScoreCard from "../components/ScoreCard";
 import { sendToZapier } from "@/lib/webhooks/zapier";
+import Logo from "./Logo";
+import FinalStep from "./FinalStep";
 
 interface FormValues {
   firstName: string;
@@ -26,8 +22,14 @@ interface FormValues {
 const MultiStepForm: React.FC = () => {
   const [step, setStep] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
+  const [submitted, setSubmitted] = useState<boolean>(false);
 
-  const timeStamp = new Date();
+  const today = new Date().toLocaleDateString("en-US");
+  const resetForm = () => {
+    formik.resetForm();
+    setStep(1);
+    setSubmitted(false);
+  };
 
   const validationSchemas = [
     yup.object({
@@ -53,7 +55,7 @@ const MultiStepForm: React.FC = () => {
       email: "",
       phone: "",
       ...Object.fromEntries([...Array(9)].map((_, i) => [`hole${i + 1}`, ""])),
-      date: new Date().toString(),
+      date: today,
     },
 
     validationSchema: validationSchemas[step - 1],
@@ -64,13 +66,11 @@ const MultiStepForm: React.FC = () => {
         try {
           setLoading(true);
           sendToZapier(values);
-          alert("Your Scores Have Been Submitted");
-          formik.resetForm();
-          setStep(1);
         } catch (error) {
           console.error("Error adding document: ", error);
         } finally {
           setLoading(false);
+          setSubmitted(true);
         }
       }, 1000);
     },
@@ -95,26 +95,33 @@ const MultiStepForm: React.FC = () => {
     if (step > 1) setStep((prev) => prev - 1);
   };
 
-  const today = new Date().toLocaleDateString("en-US");
-
   return (
-    <section className="grid  place-content-center">
-      <Box className="space-y-8">
-        <hgroup className="text-center pt-8">
-          <Typography variant="h3">
-            The Stable <br /> Scorecard
-          </Typography>
-          <p>{today}</p>
-        </hgroup>
+    <section className="grid place-content-center">
+      <Box className="space-y-8 pt-8 flex flex-col items-center">
+        <div className="flex flex-col items-center">
+          <Logo />
+          <Typography variant="h4">Scorecard</Typography>
+          <p>
+            <strong>{today}</strong>
+          </p>
+        </div>
 
-        <Paper className="p-8 w-[80vw] rounded grid gap-9">
-          {loading && <CircularProgress />}
-          {step === 1 && <UserInfo formik={formik} next={handleNext} />}
-          {step === 2 && (
+        <Paper className="p-8 max-md:w-[90vw] rounded grid gap-9">
+          {loading && <CircularProgress color="primary" size={64} />}
+          {step === 1 && !loading && !submitted && (
+            <UserInfo formik={formik} next={handleNext} />
+          )}
+          {step === 2 && !loading && !submitted && (
             <ScoreCard
               formik={formik}
               previous={handlePrevious}
               submit={formik.handleSubmit}
+            />
+          )}
+          {submitted && (
+            <FinalStep
+              firstName={formik.values.firstName}
+              restartForm={resetForm}
             />
           )}
         </Paper>
