@@ -4,25 +4,16 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { Paper, CircularProgress, Typography, Box } from "@mui/material";
-import UserInfo from "../components/UserInfo";
-import ScoreCard from "../components/ScoreCard";
+import UserInfo from "./UserInfo";
+import ScoreCard from "./ScoreCard";
 import { sendToZapier } from "@/lib/webhooks/zapier";
 import Logo from "./Logo";
 import FinalStep from "./FinalStep";
 
-interface FormValues {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  date: string;
-  [key: string]: string;
-}
-
-const MultiStepForm: React.FC = () => {
-  const [step, setStep] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [submitted, setSubmitted] = useState<boolean>(false);
+const MultiStepForm = () => {
+  const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const today = new Date().toLocaleDateString("en-US");
   const resetForm = () => {
@@ -44,18 +35,18 @@ const MultiStepForm: React.FC = () => {
           .number()
           .required(`Score for Hole ${i + 1} is required`);
         return schema;
-      }, {} as Record<string, yup.NumberSchema>)
+      }, {})
     ),
   ];
 
-  const formik = useFormik<FormValues>({
+  const formik = useFormik({
     initialValues: {
       firstName: "",
       lastName: "",
       email: "",
       phone: "",
       ...Object.fromEntries([...Array(9)].map((_, i) => [`hole${i + 1}`, ""])),
-      date: today,
+      date: new Date().toISOString(), // Store the current timestamp in ISO format
     },
 
     validationSchema: validationSchemas[step - 1],
