@@ -30,7 +30,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ formik, next }) => {
   };
 
   return (
-    <Box maxWidth={500} className="grid gap-4">
+    <Box className="grid gap-4">
       <Typography variant="h4">Player Info</Typography>
       <TextField
         fullWidth
