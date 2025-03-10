@@ -98,7 +98,11 @@ const MultiStepForm = () => {
         </div>
 
         <Paper className="p-8 max-md:w-[90vw] rounded grid gap-9">
-          {loading && <CircularProgress color="primary" size={64} />}
+          {loading && (
+            <div className="w-full h-[300px] grid place-content-center">
+              <CircularProgress color="primary" size={64} />
+            </div>
+          )}
           {step === 1 && !loading && !submitted && (
             <UserInfo formik={formik} next={handleNext} />
           )}
