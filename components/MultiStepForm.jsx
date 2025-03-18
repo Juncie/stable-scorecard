@@ -87,11 +87,16 @@ const MultiStepForm = () => {
   };
 
   return (
-    <section className="grid place-content-center">
+    <section className="grid place-content-center relative z-10">
       <Box className="space-y-8 pt-8 flex flex-col items-center">
         <div className="flex flex-col items-center">
           <Logo />
-          <Typography variant="h4">Scorecard</Typography>
+          <Typography
+            variant="h4"
+            className="uppercase stroke-1 stroke-yellow-200"
+          >
+            <strong>Scorecard</strong>
+          </Typography>
           <p>
             <strong>{today}</strong>
           </p>

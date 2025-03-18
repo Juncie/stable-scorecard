@@ -32,6 +32,10 @@ const UserInfo: React.FC<UserInfoProps> = ({ formik, next }) => {
   return (
     <Box className="grid gap-4">
       <Typography variant="h5">Player Info</Typography>
+      <p className="text-sm text-slate-500">
+        Please enter your information below to be entered to win the Stable
+        Contest. Prizes are announced weekly!
+      </p>
       <TextField
         fullWidth
         name="firstName"
