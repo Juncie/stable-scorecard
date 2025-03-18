@@ -87,7 +87,7 @@ const MultiStepForm = () => {
   };
 
   return (
-    <section className="grid place-content-center relative z-10">
+    <section className="grid place-content-center relative z-10 pb-8">
       <Box className="space-y-8 pt-8 flex flex-col items-center">
         <div className="flex flex-col items-center">
           <Logo />
